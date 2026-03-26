@@ -1,17 +1,16 @@
-# Legal Disclaimer & Terms of Use (Examples)
+# Legal Disclaimer & Terms of Use
 
-**Last Updated: March 8, 2026**
+**Last Updated: March 27, 2026**
 
-## 1. Technical Demonstration Only
-The code samples, scripts, and integration patterns provided in this repository are for **educational and technical demonstration purposes only**.
-They are intended solely to demonstrate how to interface with the **Sakutto Works Data Normalization Infrastructure**.
+## 1. Official MCP Server Scope
+This repository provides the official Model Context Protocol (MCP) Server for the **Sakutto Works Data Normalization Infrastructure (Agent-Commerce-OS)**. It is designed to bridge AI agents with our zero-trust, metered data processing API.
 
 ## 2. Pure Data Infrastructure Scope
-**THE EXAMPLES PROVIDED HEREIN DO NOT CONSTITUTE PREDICTIVE OR ADVISORY LOGIC.**
+**THIS SERVER AND THE UNDERLYING API DO NOT PROVIDE PREDICTIVE OR ADVISORY LOGIC.**
 
-- **Infrastructure Focus:** The samples focus on technical tasks such as API authentication, JSON schema validation, and Markdown formatting.
+- **Infrastructure Focus:** The server strictly facilitates data extraction, normalization (HTML to Markdown/JSON), and context routing.
 - **No Automated Execution:** This repository does not contain, promote, or encourage the use of automated decision-making systems or execution algorithms.
-- **Mock Data:** Any data or values used in these examples are strictly for testing system connectivity and should not be interpreted as real-world analytical metrics.
+- **Responsibility of Use:** Users and their autonomous agents are solely responsible for the prompts submitted and the usage of the normalized data returned by the API.
 
 ## 3. Limitation of Liability
-Users assume full responsibility for the execution of these examples. Sakutto Works provides this code "as is" without warranty of any kind, express or implied, regarding its performance or fitness for a particular purpose.
+Sakutto Works provides this software "as is" without warranty of any kind, express or implied. In no event shall Sakutto Works be liable for any claim, damages, or other liability arising from the use of this MCP server or the underlying API services, including but not limited to API usage costs incurred via Polar.sh metered billing.
