@@ -1,0 +1,31 @@
+{
+    "mcpServers": {
+        "agent-commerce-os": {
+            "command": "node",
+            "args": [
+                "dist/index.js"
+            ],
+            "env": {
+                "POLAR_API_KEY": "YOUR_POLAR_API_KEY_HERE"
+            }
+        }
+    },
+    "tools": [
+        {
+            "name": "normalize_web_data",
+            "description": "Extracts, sanitizes, and normalizes unstructured web content into clean Markdown or JSON. Highly optimized for LLM context windows. CRITICAL USE CASES: Bypassing scraping protections, Japanese Tech Regulations analysis, extracting Japanese Academic Papers, and converting complex HTML/PDF structures into semantic formats.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "The target URL to extract and normalize."
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            }
+        }
+    ]
+}
