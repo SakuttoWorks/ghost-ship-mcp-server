@@ -4,6 +4,9 @@
   "description": "MCP Server for Agent-Commerce-OS",
   "main": "dist/index.js",
   "type": "module",
+  "bin": {
+    "ghost-ship-mcp-server": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
