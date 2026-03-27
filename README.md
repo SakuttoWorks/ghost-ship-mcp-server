@@ -5,6 +5,9 @@
 ## 🚀 Overview
 This repository provides the official MCP Server for **Project GHOST SHIP (Agent-Commerce-OS)**. It allows AI agents (like Claude Desktop) to autonomously connect to our Zero-Trust, metered-billing (Polar.sh) API to extract and normalize unstructured web data into clean Markdown or JSON formats.
 
+[![smithery badge](https://smithery.ai/badge/github/SakuttoWorks/ghost-ship-mcp-server)](https://smithery.ai/server/github/SakuttoWorks/ghost-ship-mcp-server)
+[![glama badge](https://glama.ai/badge/github/SakuttoWorks/ghost-ship-mcp-server)](https://glama.ai/server/github/SakuttoWorks/ghost-ship-mcp-server)
+
 ---
 
 ## 🏗️ Architecture
@@ -17,7 +20,7 @@ This repository provides the official MCP Server for **Project GHOST SHIP (Agent
 ## ⚙️ Prerequisites
 - An active **Polar.sh API Key** (for metered billing: $0.10 / request).
 - **Claude Desktop** or any standard MCP-compatible client.
-- Node.js or Python environment (depending on the client execution context).
+- Node.js environment (v18 or higher recommended).
 
 ---
 
@@ -37,17 +40,17 @@ To grant your AI agent access to the normalization tools, add the following conf
       "command": "npx",
       "args": [
         "-y",
-        "@sakuttoworks/agent-commerce-mcp"
+        "github:SakuttoWorks/ghost-ship-mcp-server"
       ],
       "env": {
-        "POLAR_API_KEY": "polar_..."
+        "POLAR_API_KEY": "your_polar_api_key_here"
       }
     }
   }
 }
 ```
 
-*(Note: Replace `polar_...` with your actual Polar.sh API key. The exact `command` and `args` are placeholders. Depending on the final implementation, this will be updated to use `npx` (Node.js) or `uvx` / `python -m` (Python) upon package publication.)*
+*(Note: Replace `your_polar_api_key_here` with your actual Polar.sh API key.)*
 
 ---
 
