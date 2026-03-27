@@ -18,7 +18,7 @@ This repository provides the official MCP Server for **Project GHOST SHIP (Agent
 ---
 
 ## ⚙️ Prerequisites
-- An active **Polar.sh API Key** (for metered billing: $0.10 / request).
+- An active **Polar.sh API Key** (for metered billing: $0.10 / request). Get yours from the [Official Portal](https://sakutto.works).
 - **Claude Desktop** or any standard MCP-compatible client.
 - Node.js environment (v18 or higher recommended).
 
