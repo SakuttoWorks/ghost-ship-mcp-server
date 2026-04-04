@@ -1,0 +1,7 @@
+version: "1"
+build:
+  command: "npm install && npx tsc"
+start:
+  command: "node"
+  args:
+    - "dist/index.js"
