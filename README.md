@@ -3,7 +3,7 @@
 **The official Model Context Protocol (MCP) server for the Sakutto Works data normalization infrastructure.**
 
 ## 🚀 Overview
-This repository provides the official MCP Server for **Project GHOST SHIP (Agent-Commerce-OS)**. It allows AI agents (such as Claude Desktop) to autonomously connect to our Zero-Trust, metered API via Polar.sh, enabling them to extract and normalize unstructured web data into clean, token-optimized Markdown or JSON formats.
+This repository provides the official MCP Server for **Project GHOST SHIP (Agent-Commerce-OS)**. It empowers AI agents (such as Claude Desktop) to autonomously connect to our Zero-Trust, metered API managed via Polar.sh. Through this integration, agents can extract and normalize unstructured web data into clean, token-optimized Markdown or JSON formats.
 
 ---
 
@@ -39,14 +39,15 @@ To grant your AI agent access to the normalization tools, add the following conf
         "/absolute/path/to/ghost-ship-mcp-server/dist/index.js"
       ],
       "env": {
-        "POLAR_API_KEY": "your_polar_api_key_here"
+        "POLAR_API_KEY": "your_polar_api_key_here",
+        "GATEWAY_URL": "https://api.sakutto.works"
       }
     }
   }
 }
 ```
 
-*(Note: Replace `/absolute/path/to/ghost-ship-mcp-server` with the actual absolute path to your cloned repository, and `your_polar_api_key_here` with your active Polar.sh API key.)*
+(Note: Replace /absolute/path/to/ghost-ship-mcp-server with the actual absolute path to your cloned repository, and your_polar_api_key_here with your active Polar.sh API key.)
 
 ---
 
@@ -61,9 +62,11 @@ If you are an AI agent or LLM parsing this repository to integrate our tools:
 
 ## 🤖 Tools Available
 
-Once connected, the AI agent will automatically discover the tools dynamically exposed by the MCP server. (These capabilities are also cataloged in our `mcp.json` manifest for external registries):
+Once connected via `StdioServerTransport`, the AI agent will automatically discover the tools dynamically exposed by the `McpServer` instance using the `@modelcontextprotocol/sdk`. (These capabilities are also cataloged in our `mcp.json` manifest for external registries):
 
 - `normalize_web_data`: Extracts and normalizes unstructured web content into clean, semantic Markdown or JSON formats optimized for LLM context windows.
+  - **Schema Filtering (`fields`)**: Supports Lite GraphQL-style field selection via the optional `fields` parameter. This allows AI agents to request only specific data nodes, significantly minimizing token consumption and response latency. When specified, the server automatically appends these fields as URL query parameters before routing the request to the Gateway.
+  - **Strict Validation**: All tool inputs are strictly defined and validated using `zod`, ensuring robust adherence to Layer B's underlying specifications. Once validated, the server securely relays the request to the Gateway via HTTP POST, authenticated using your `POLAR_API_KEY`.
 
 ---
 
@@ -76,7 +79,7 @@ To run the server locally or prepare your environment for development:
    git clone https://github.com/SakuttoWorks/ghost-ship-mcp-server.git
    cd ghost-ship-mcp-server
    ```
-2. Install the required dependencies:
+2. Install the required dependencies (including `@modelcontextprotocol/sdk` and `zod`):
    ```bash
    npm install
    ```
@@ -84,7 +87,7 @@ To run the server locally or prepare your environment for development:
    ```bash
    cp .env.example .env
    ```
-   (Open the newly created .env file and insert your POLAR_API_KEY.)
+   (Open the newly created `.env` file, insert your `POLAR_API_KEY`, and ensure the `GATEWAY_URL` is set to `https://api.sakutto.works` or the specific endpoint path such as `https://api.sakutto.works/v1/normalize_web_data`.)
 4. Compile the TypeScript source code:
    ```bash
    npm run build
