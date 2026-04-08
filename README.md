@@ -7,6 +7,15 @@ This repository provides the official MCP Server for **Project GHOST SHIP (Agent
 
 ---
 
+## ✨ Key Features
+
+* 🛡️ **Zero-Trust Edge Security:** Strict prompt injection shielding and perimeter defense at the Cloudflare Edge.
+* 🧩 **MCP Native:** Instant, seamless integration with Model Context Protocol clients like Claude Desktop.
+* ⚡ **Lite GraphQL Filtering:** Pass an optional `fields` array to extract only the exact data nodes your agent needs, drastically minimizing context window token consumption.
+* 💳 **Pure Pay-As-You-Go:** $0.10 per successful call powered by Polar.sh. No hidden fees, no forced subscriptions.
+
+---
+
 ## 🏗️ Architecture
 Our infrastructure operates on a three-tier zero-trust model. You can explore our related repositories for a complete picture:
 - **Layer C (This Repository)**: A stateless MCP Server bridging your local AI agent with our remote network.
