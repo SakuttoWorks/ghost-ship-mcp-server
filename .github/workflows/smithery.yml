@@ -1,0 +1,28 @@
+name: Publish to Smithery
+
+# Allow manual triggering of the workflow from the GitHub Actions tab
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # Run on a reliable Linux environment to prevent OS-specific CLI issues
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish to Smithery Registry
+        env:
+          # Load the Smithery token configured in repository secrets
+          SMITHERY_TOKEN: ${{ secrets.SMITHERY_TOKEN }}
+        # Execute the publish command in the isolated CI environment
+        run: npx @smithery/cli@latest publish
