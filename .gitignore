@@ -44,3 +44,5 @@ Icon\r\n
 Thumbs.db
 ehthumbs.db
 desktop.ini
+# MCP Inspector Cache
+.smithery/

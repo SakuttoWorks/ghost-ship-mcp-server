@@ -13,6 +13,7 @@ This repository provides the official MCP Server for **Project GHOST SHIP (Agent
 * 🧩 **MCP Native:** Instant, seamless integration with Model Context Protocol clients like Claude Desktop.
 * ⚡ **Lite GraphQL Filtering:** Pass an optional `fields` array to extract only the exact data nodes your agent needs, drastically minimizing context window token consumption.
 * 💳 **Pure Pay-As-You-Go:** $0.10 per successful call powered by Polar.sh. No hidden fees, no forced subscriptions.
+* 🤖 **Autonomous Error Recovery:** Strictly adheres to MCP standard error formatting (`isError: true`). Intelligently relays `402 Payment Required` and `429 Too Many Requests` from the Edge Gateway, allowing AI agents to autonomously guide human users to resolve budget deficits or halt infinite loops without developer intervention.
 
 ---
 

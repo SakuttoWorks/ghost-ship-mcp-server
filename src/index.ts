@@ -50,9 +50,21 @@ server.tool(
 
             const data = await response.json();
 
+            // [Phase 4: Step 3] Agent-Compliant Error Handling
             if (!response.ok) {
+                let errorText = `API Error (${response.status}): ${JSON.stringify(data)}`;
+
+                // Format explicit instructions for autonomous agent resolution
+                if (response.status === 402 && data.top_up_url) {
+                    errorText = `[PAYMENT REQUIRED] ${data.message}\nInstruction: ${data.agent_instruction}\nTop-up URL: ${data.top_up_url}`;
+                } else if (response.status === 429) {
+                    errorText = `[RATE LIMIT EXCEEDED] ${data.message}\nInstruction: ${data.agent_instruction}`;
+                } else if (response.status === 403) {
+                    errorText = `[SECURITY BLOCK] ${data.message}\nInstruction: ${data.agent_instruction}`;
+                }
+
                 return {
-                    content: [{ type: "text", text: `API Error (${response.status}): ${JSON.stringify(data)}` }],
+                    content: [{ type: "text", text: errorText }],
                     isError: true,
                 };
             }
