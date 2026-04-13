@@ -33,7 +33,7 @@ server.tool(
         }
 
         try {
-            // Construct Payload (Matching openapi.yaml specification)
+            // Construct Payload
             const payload: Record<string, any> = { url };
             if (format_type) payload.format_type = format_type;
             if (fields && fields.length > 0) payload.fields = fields;
@@ -48,19 +48,22 @@ server.tool(
                 body: JSON.stringify(payload),
             });
 
-            const data = await response.json();
+            // FIX: Explicitly cast the parsed JSON to a usable record type
+            const data = (await response.json()) as Record<string, any>;
 
-            // [Phase 4: Step 3] Agent-Compliant Error Handling
+            // [Phase 4: Step 3/5] Agent-Compliant Error Handling with Trace ID
             if (!response.ok) {
                 let errorText = `API Error (${response.status}): ${JSON.stringify(data)}`;
+                const traceIdStr = data.trace_id ? `\nTrace ID: ${data.trace_id}` : '';
 
-                // Format explicit instructions for autonomous agent resolution
                 if (response.status === 402 && data.top_up_url) {
-                    errorText = `[PAYMENT REQUIRED] ${data.message}\nInstruction: ${data.agent_instruction}\nTop-up URL: ${data.top_up_url}`;
+                    errorText = `[PAYMENT REQUIRED] ${data.message}\nInstruction: ${data.agent_instruction}\nTop-up URL: ${data.top_up_url}${traceIdStr}`;
                 } else if (response.status === 429) {
-                    errorText = `[RATE LIMIT EXCEEDED] ${data.message}\nInstruction: ${data.agent_instruction}`;
+                    errorText = `[RATE LIMIT EXCEEDED] ${data.message}\nInstruction: ${data.agent_instruction}${traceIdStr}`;
                 } else if (response.status === 403) {
-                    errorText = `[SECURITY BLOCK] ${data.message}\nInstruction: ${data.agent_instruction}`;
+                    errorText = `[SECURITY BLOCK] ${data.message}\nInstruction: ${data.agent_instruction}${traceIdStr}`;
+                } else if (data.trace_id) {
+                    errorText = `[API ERROR] ${data.message || 'Unknown Error'}\nInstruction: ${data.agent_instruction || 'Check Trace ID'}${traceIdStr}`;
                 }
 
                 return {
@@ -69,6 +72,7 @@ server.tool(
                 };
             }
 
+            // Normal Execution
             return {
                 content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
             };
