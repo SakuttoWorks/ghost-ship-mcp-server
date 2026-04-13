@@ -15,6 +15,7 @@ This repository provides the official MCP Server for **Project GHOST SHIP (Agent
 * 💳 **Pure Pay-As-You-Go:** $0.10 per successful call powered by Polar.sh. No hidden fees, no forced subscriptions.
 * 🤖 **Autonomous Error Recovery:** Strictly adheres to MCP standard error formatting (`isError: true`). Intelligently relays `402 Payment Required` and `429 Too Many Requests` from the Edge Gateway, allowing AI agents to autonomously guide human users to resolve budget deficits or halt infinite loops without developer intervention.
 * 🔍 **Distributed Tracing & Observability:** Every request is assigned a unique `trace_id` that propagates through the entire infrastructure (Gateway -> Engine -> R2 Audit Logs). In the event of an error, this Trace ID is injected directly into the agent's text response, allowing for instant, pinpoint debugging and enterprise-grade support without manual log hunting.
+* 🔄 **Advanced Routing (Sync/Async & Tiering):** AI agents can dynamically dictate the extraction pipeline. By providing a `target_tier` (e.g., Actionable Data, Compliance Check), the engine adapts its schema. Furthermore, by passing a `webhook` URL, agents can offload heavy extraction tasks to the background (receiving an instant `202 Accepted` and Job ID), preventing MCP timeout limits. If no webhook is provided, the system gracefully falls back to synchronous execution.
 
 ---
 
@@ -77,6 +78,8 @@ Once connected via `StdioServerTransport`, the AI agent will automatically disco
 
 - `normalize_web_data`: Extracts and normalizes unstructured web content into clean, semantic Markdown or JSON formats optimized for LLM context windows.
   - **Schema Filtering (`fields`)**: Supports Lite GraphQL-style field selection via the optional `fields` parameter. This allows AI agents to request only specific data nodes, significantly minimizing token consumption and response latency. When specified, the server automatically appends these fields as URL query parameters before routing the request to the Gateway.
+  - **Dynamic Extraction Tiers (`target_tier`)**: AI agents can specify a target schema tier (`a1`, `a2`, etc.) to alter the extraction logic on the fly (e.g., extracting strict actionable availability data vs. standard markdown).
+  - **Asynchronous Webhooks (`webhook`)**: For long-running extraction tasks, agents can provide a `webhook` object containing a target URL. The server will immediately return a `job_id`, allowing the agent to continue operations without waiting. **Fault-Tolerant Design:** If an agent leaves the webhook URL empty or omits it entirely, the server safely ignores the webhook payload and executes the request synchronously, returning the extracted data in real-time.
   - **Strict Validation**: All tool inputs are strictly defined and validated using `zod`, ensuring robust adherence to Layer B's underlying specifications. Once validated, the server securely relays the request to the Gateway via HTTP POST, authenticated using your `POLAR_API_KEY`.
 
 ---

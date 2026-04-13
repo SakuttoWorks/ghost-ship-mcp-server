@@ -19,10 +19,15 @@ server.tool(
     {
         url: z.string().url().describe("The target URL to extract and normalize."),
         format_type: z.enum(["markdown", "json"]).optional().describe("Desired output format. Supported values: 'json', 'markdown'."),
-        fields: z.array(z.string()).optional().describe("Schema Filtering (Lite GraphQL): Array of fields to extract, minimizing token consumption.")
+        fields: z.array(z.string()).optional().describe("Schema Filtering (Lite GraphQL): Array of fields to extract, minimizing token consumption."),
+        target_tier: z.string().optional().describe("Extraction schema tier (e.g., 'a1' for async processing, 'a2' for actionable data, 'a3' for compliance). Defaults to standard."),
+        webhook: z.object({
+            // FIX: .url() の厳格チェックを外し、空文字を許容する
+            url: z.string().optional().describe("The webhook endpoint URL to receive async results.")
+        }).optional().describe("Webhook configuration for asynchronous processing. Required if target_tier is 'a1'.")
     },
     // 4. Tool Execution (Relay Logic)
-    async ({ url, format_type, fields }) => {
+    async ({ url, format_type, fields, target_tier, webhook }) => {
         const polarApiKey = process.env.POLAR_API_KEY;
 
         if (!polarApiKey) {
@@ -37,6 +42,12 @@ server.tool(
             const payload: Record<string, any> = { url };
             if (format_type) payload.format_type = format_type;
             if (fields && fields.length > 0) payload.fields = fields;
+            if (target_tier) payload.target_tier = target_tier;
+
+            // FIX: webhookが存在し、かつURLが空文字ではない時のみペイロードに追加する（それ以外は同期処理になる）
+            if (webhook && webhook.url && webhook.url.trim() !== "") {
+                payload.webhook = webhook;
+            }
 
             // Relay request to Layer A with Polar.sh Auth
             const response = await fetch(GATEWAY_URL, {
