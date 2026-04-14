@@ -52,7 +52,7 @@ To grant your AI agent access to the normalization tools, add the following conf
       ],
       "env": {
         "POLAR_API_KEY": "your_polar_api_key_here",
-        "GATEWAY_URL": "https://api.sakutto.works"
+        "GATEWAY_URL": "https://api.sakutto.works/v1/normalize_web_data"
       }
     }
   }

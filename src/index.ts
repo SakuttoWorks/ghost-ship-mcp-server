@@ -3,16 +3,41 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-// 1. Initialize MCP Server
+// ==========================================
+// 1. Configuration & Server Initialization
+// ==========================================
 const server = new McpServer({
     name: "agent-commerce-mcp-server",
     version: "1.0.0",
 });
 
-// 2. Define API Gateway URL (Layer A)
 const GATEWAY_URL = process.env.GATEWAY_URL || "https://api.sakutto.works/v1/normalize_web_data";
 
+// ==========================================
+// 2. Helper Functions
+// ==========================================
+function formatAgentErrorMessage(status: number, data: Record<string, any>): string {
+    const traceIdStr = data.trace_id ? `\nTrace ID: ${data.trace_id}` : '';
+
+    if (status === 402 && data.top_up_url) {
+        return `[PAYMENT REQUIRED] ${data.message}\nInstruction: ${data.agent_instruction}\nTop-up URL: ${data.top_up_url}${traceIdStr}`;
+    }
+    if (status === 429) {
+        return `[RATE LIMIT EXCEEDED] ${data.message}\nInstruction: ${data.agent_instruction}${traceIdStr}`;
+    }
+    if (status === 403) {
+        return `[SECURITY BLOCK] ${data.message}\nInstruction: ${data.agent_instruction}${traceIdStr}`;
+    }
+    if (data.trace_id) {
+        return `[API ERROR] ${data.message || 'Unknown Error'}\nInstruction: ${data.agent_instruction || 'Check Trace ID'}${traceIdStr}`;
+    }
+
+    return `API Error (${status}): ${JSON.stringify(data)}`;
+}
+
+// ==========================================
 // 3. Tool Definition (Discovery & Schema)
+// ==========================================
 server.tool(
     "normalize_web_data",
     "Extracts, sanitizes, and normalizes unstructured web content into clean Markdown or JSON. Highly optimized for LLM context windows. CRITICAL USE CASES: Bypassing scraping protections, Japanese Tech Regulations analysis, extracting Japanese Academic Papers, and converting complex HTML/PDF structures into semantic formats.",
@@ -22,11 +47,13 @@ server.tool(
         fields: z.array(z.string()).optional().describe("Schema Filtering (Lite GraphQL): Array of fields to extract, minimizing token consumption."),
         target_tier: z.string().optional().describe("Extraction schema tier (e.g., 'a1' for async processing, 'a2' for actionable data, 'a3' for compliance). Defaults to standard."),
         webhook: z.object({
-            // FIX: .url() の厳格チェックを外し、空文字を許容する
+            // FIX: Remove strict .url() validation to allow empty strings for fallback handling
             url: z.string().optional().describe("The webhook endpoint URL to receive async results.")
         }).optional().describe("Webhook configuration for asynchronous processing. Required if target_tier is 'a1'.")
     },
+    // ==========================================
     // 4. Tool Execution (Relay Logic)
+    // ==========================================
     async ({ url, format_type, fields, target_tier, webhook }) => {
         const polarApiKey = process.env.POLAR_API_KEY;
 
@@ -44,7 +71,7 @@ server.tool(
             if (fields && fields.length > 0) payload.fields = fields;
             if (target_tier) payload.target_tier = target_tier;
 
-            // FIX: webhookが存在し、かつURLが空文字ではない時のみペイロードに追加する（それ以外は同期処理になる）
+            // FIX: Add webhook to payload only if it exists and the URL is not an empty string (otherwise fallback to synchronous processing)
             if (webhook && webhook.url && webhook.url.trim() !== "") {
                 payload.webhook = webhook;
             }
@@ -59,26 +86,12 @@ server.tool(
                 body: JSON.stringify(payload),
             });
 
-            // FIX: Explicitly cast the parsed JSON to a usable record type
             const data = (await response.json()) as Record<string, any>;
 
             // [Phase 4: Step 3/5] Agent-Compliant Error Handling with Trace ID
             if (!response.ok) {
-                let errorText = `API Error (${response.status}): ${JSON.stringify(data)}`;
-                const traceIdStr = data.trace_id ? `\nTrace ID: ${data.trace_id}` : '';
-
-                if (response.status === 402 && data.top_up_url) {
-                    errorText = `[PAYMENT REQUIRED] ${data.message}\nInstruction: ${data.agent_instruction}\nTop-up URL: ${data.top_up_url}${traceIdStr}`;
-                } else if (response.status === 429) {
-                    errorText = `[RATE LIMIT EXCEEDED] ${data.message}\nInstruction: ${data.agent_instruction}${traceIdStr}`;
-                } else if (response.status === 403) {
-                    errorText = `[SECURITY BLOCK] ${data.message}\nInstruction: ${data.agent_instruction}${traceIdStr}`;
-                } else if (data.trace_id) {
-                    errorText = `[API ERROR] ${data.message || 'Unknown Error'}\nInstruction: ${data.agent_instruction || 'Check Trace ID'}${traceIdStr}`;
-                }
-
                 return {
-                    content: [{ type: "text", text: errorText }],
+                    content: [{ type: "text", text: formatAgentErrorMessage(response.status, data) }],
                     isError: true,
                 };
             }
@@ -96,7 +109,9 @@ server.tool(
     }
 );
 
+// ==========================================
 // 5. Start Server using Standard Input/Output
+// ==========================================
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
