@@ -28,6 +28,8 @@ Our infrastructure operates on a three-tier zero-trust model. You can explore ou
 ---
 
 ## ⚙️ Prerequisites
+## ⚙️ Prerequisites
+- **Node.js** (v18 or higher recommended) and npm installed.
 - An active **Polar.sh API Key** (metered billing at $0.10 / request). Obtain yours from the [Official API Key Checkout](https://buy.polar.sh/polar_cl_mps3G1hmCTmQWDYYEMY2G1c7sojN3Tul6IhjO4EtVuj).
 - **Claude Desktop** or any standard MCP-compatible client.
 
@@ -119,6 +121,8 @@ We welcome and encourage contributions from the open-source community! When subm
 - Your code successfully builds (`npm run build`).
 - All tests pass locally (using `npx vitest` or your preferred test runner).
 - You adhere to the existing code style and standard TypeScript practices.
+
+Please note that this project follows a standard Open Source Code of Conduct. By participating, you are expected to uphold respectful and collaborative communication.
 
 ---
 
