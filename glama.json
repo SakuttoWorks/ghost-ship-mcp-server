@@ -1,0 +1,8 @@
+{
+    "version": 1,
+    "mcpServers": {
+        "ghost-ship-mcp-server": {
+            "repository": "https://github.com/SakuttoWorks/ghost-ship-mcp-server"
+        }
+    }
+}
