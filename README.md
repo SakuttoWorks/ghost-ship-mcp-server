@@ -4,6 +4,7 @@
 [![ghost-ship-mcp-server MCP server](https://glama.ai/mcp/servers/SakuttoWorks/ghost-ship-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/SakuttoWorks/ghost-ship-mcp-server)
 [![Get API Key](https://img.shields.io/badge/Get_API_Key-Polar.sh-blue?style=for-the-badge)](https://buy.polar.sh/polar_cl_mps3G1hmCTmQWDYYEMY2G1c7sojN3Tul6IhjO4EtVuj)
 [![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?style=for-the-badge&logo=github)](https://github.com/sponsors/SakuttoWorks)
+[![SafeSkill 91/100](https://img.shields.io/badge/SafeSkill-91%2F100_Verified%20Safe-brightgreen)](https://safeskill.dev/scan/sakuttoworks-ghost-ship-mcp-server)
 
 **The official Model Context Protocol (MCP) server for the Sakutto Works data normalization infrastructure.**
 
