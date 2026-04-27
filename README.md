@@ -1,6 +1,13 @@
 # Agent-Commerce-OS MCP Server
 
+[![Official Portal](https://img.shields.io/badge/Official_Portal-sakutto.works-000000?style=for-the-badge)](https://sakutto.works)
+[![ghost-ship-mcp-server MCP server](https://glama.ai/mcp/servers/SakuttoWorks/ghost-ship-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/SakuttoWorks/ghost-ship-mcp-server)
+[![Get API Key](https://img.shields.io/badge/Get_API_Key-Polar.sh-blue?style=for-the-badge)](https://buy.polar.sh/polar_cl_mps3G1hmCTmQWDYYEMY2G1c7sojN3Tul6IhjO4EtVuj)
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?style=for-the-badge&logo=github)](https://github.com/sponsors/SakuttoWorks)
+
 **The official Model Context Protocol (MCP) server for the Sakutto Works data normalization infrastructure.**
+
+---
 
 ## 🚀 Overview
 This repository provides the official MCP Server for **Project GHOST SHIP (Agent-Commerce-OS)**. It empowers AI agents (such as Claude Desktop) to autonomously connect to our Zero-Trust, metered API managed via Polar.sh. Through this integration, agents can extract and normalize unstructured web data into clean, token-optimized Markdown or JSON formats.
